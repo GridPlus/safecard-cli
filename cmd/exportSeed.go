@@ -27,7 +27,7 @@ import (
 // exportSeedCmd represents the exportSeed command
 var exportSeedCmd = &cobra.Command{
 	Use:   "exportSeed",
-	Short: "Export our Safecard wallet's root seed",
+	Short: "Export our Safecard wallet's root seed.",
 	Long:  `Export your Safecard wallet's root seed.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		exportSeed()
@@ -36,38 +36,12 @@ var exportSeedCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(exportSeedCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// exportSeedCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// exportSeedCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func exportSeed() {
-	cs, err := card.Connect()
+	cs, err := card.OpenSecureConnection()
 	if err != nil {
-		fmt.Println("error connecting to card")
-		fmt.Println(err)
-		return
-	}
-	err = cs.Select()
-	if err != nil {
-		fmt.Println("error selecting applet. err: ", err)
-		return
-	}
-	err = cs.Pair()
-	if err != nil {
-		fmt.Println("error pairing with card. err: ", err)
-		return
-	}
-	err = cs.OpenSecureChannel()
-	if err != nil {
-		fmt.Println("error opening secure channel. err: ", err)
+		fmt.Println("unable to open secure connection with card: ", err)
 		return
 	}
 	//Prompt user for pin
@@ -75,7 +49,7 @@ func exportSeed() {
 		Label: "Pin",
 		Mask:  '*',
 	}
-	fmt.Println("Please enter 6 digit pin")
+	fmt.Println("Please enter 6 digit pin:")
 	result, err := prompt.Run()
 	if err != nil {
 		fmt.Println("prompt failed: err: ", err)

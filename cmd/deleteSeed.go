@@ -26,10 +26,9 @@ import (
 // deleteSeedCmd represents the deleteSeed command
 var deleteSeedCmd = &cobra.Command{
 	Use:   "deleteSeed",
-	Short: "WARNING: This command is irreversible once completed. Deletes the safecard root seed",
+	Short: "WARNING: This command is irreversible once completed. Deletes the safecard's wallet seed and all associated private keys.",
 	Long: `WARNING: This command is irreversible once completed.
-
-	Deletes the safecard's root seed, which is the root of all of the card's wallet keys.
+Deletes the safecard's wallet seed and all associated private keys.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		deleteSeed()
@@ -38,38 +37,12 @@ var deleteSeedCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(deleteSeedCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deleteSeedCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deleteSeedCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func deleteSeed() {
-	cs, err := card.Connect()
+	cs, err := card.OpenSecureConnection()
 	if err != nil {
-		fmt.Println("error connecting to card")
-		fmt.Println(err)
-		return
-	}
-	err = cs.Select()
-	if err != nil {
-		fmt.Println("error selecting applet. err: ", err)
-		return
-	}
-	err = cs.Pair()
-	if err != nil {
-		fmt.Println("error pairing with card. err: ", err)
-		return
-	}
-	err = cs.OpenSecureChannel()
-	if err != nil {
-		fmt.Println("error opening secure channel. err: ", err)
+		fmt.Println("unable to open secure connection with card: ", err)
 		return
 	}
 	//Prompt user for pin
@@ -77,7 +50,7 @@ func deleteSeed() {
 		Label: "Pin",
 		Mask:  '*',
 	}
-	fmt.Println("Please enter 6 digit pin")
+	fmt.Println("Please enter 6 digit pin:")
 	result, err := prompt.Run()
 	if err != nil {
 		fmt.Println("prompt failed: err: ", err)
@@ -92,11 +65,11 @@ func deleteSeed() {
 	//Prompt user to confirm seed deletion before running
 	confirm := promptui.Select{
 		Label: "Yes/No",
-		Items: []string{"yes", "no"},
+		Items: []string{"Yes", "No"},
 	}
-	fmt.Println("Are you sure you want to delete this card's master seed? This action is irreversible")
+	fmt.Println("Are you sure you want to delete this card's master wallet seed? This action is irreversible")
 	_, result, err = confirm.Run()
-	if err != nil || result != "yes" {
+	if err != nil || result != "Yes" {
 		fmt.Println("aborting deleteSeed command")
 		return
 	}
