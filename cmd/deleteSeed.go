@@ -29,10 +29,10 @@ var deleteSeedCmd = &cobra.Command{
 	Short: "WARNING: This command is irreversible once completed. Deletes the safecard root seed",
 	Long: `WARNING: This command is irreversible once completed.
 
-	Deletes the safecard's root seed, which is the source of entropy for the card.
+	Deletes the safecard's root seed, which is the root of all of the card's wallet keys.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deleteSeed called")
+		deleteSeed()
 	},
 }
 

@@ -18,6 +18,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/GridPlus/keycard-go/gridplus"
 	"github.com/gridplus/safecard-cli/card"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
@@ -87,8 +88,13 @@ func exportSeed() {
 		return
 	}
 	seed, err := cs.ExportSeed()
+	if err == gridplus.ErrSeedInvalidLength {
+		fmt.Println("card does not appear to have valid exportable seed")
+		return
+	}
 	if err != nil {
 		fmt.Println("unable to export seed. err: ", err)
+		return
 	}
 	fmt.Printf("recovery seed:\n0x%x\n", seed)
 }

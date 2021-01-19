@@ -15,7 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/gridplus/safecard-cli/cmd"
+import (
+	"github.com/gridplus/safecard-cli/cmd"
+)
 
 func main() {
 	cmd.Execute()
