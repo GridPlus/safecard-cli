@@ -67,10 +67,10 @@ func deleteSeed() {
 		Label: "Yes/No",
 		Items: []string{"Yes", "No"},
 	}
-	fmt.Println("Are you sure you want to delete this card's master wallet seed? This action is irreversible")
+	fmt.Println("Are you sure you want to delete this card's master wallet seed? This action is irreversible.")
 	_, result, err = confirm.Run()
 	if err != nil || result != "Yes" {
-		fmt.Println("aborting deleteSeed command")
+		fmt.Println("aborting deleteSeed command.")
 		return
 	}
 	err = cs.RemoveKey()

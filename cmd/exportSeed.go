@@ -63,7 +63,7 @@ func exportSeed() {
 	}
 	seed, err := cs.ExportSeed()
 	if err == gridplus.ErrSeedInvalidLength {
-		fmt.Println("card does not appear to have valid exportable seed")
+		fmt.Println("card does not appear to have valid exportable seed.")
 		return
 	}
 	if err != nil {
