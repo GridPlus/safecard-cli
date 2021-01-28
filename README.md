@@ -25,7 +25,7 @@ Both require the user pin to be verified before executing.
 safecard-cli exportSeed
 ```
 
-Export seed will export the card's root wallet key as a binary seed represented in hex. This hex seed can be used to derive wallet private keys and addresses.
+Export seed will export the card's master wallet seed as a binary seed represented in hex. This hex seed can be used to derive wallet private keys and addresses.
 
 An example means of [using the exported seed](#using-the-exported-seed) is shown below.
 
@@ -38,7 +38,12 @@ safecard-cli deleteSeed
 Delete seed will delete the master wallet key, effectively destroying the safecard's wallet. This operation is irreversible and requires a pin and confirmation from the user before the wallet is able to be deleted.
 
 ### Using the Exported Seed
-A simple NodeJS class that you could use to derive private keys and addresses is shown below. You can import a single private key into metamask for Ethereum. For Bitcoin, you would need to use something like bitcoinjs-lib (https://www.npmjs.com/package/bitcoinjs-lib) to build the transactions.
+SafeCards store the entropy (i.e. “seed”) of a hierarchical, deterministic BIP32 wallet. This is notably different from a seed phrase, specifically it is the hash of a phrase (plus optional password). This means that you cannot “go back” to a seed phrase, but your seed is all you need to derive addresses and private keys.
+
+You can use any number of off-the-shelf developer tools to derive keys from a seed. When you get the desired private key, you can either import it directly into MetaMask (for use with Ethereum) or use it to sign transactions you build using a Bitcoin library like [bitcoinjs-lib ](https://www.npmjs.com/package/bitcoinjs-lib).
+
+The following script is an example of how to take your seed and derive addresses or private keys using Javascript modules. If you wish to do this at the command line, we recommend putting the following script in its own directory (name it derive.js or something) and running npm init, pressing enter a bunch of times until the prompt is gone, and then running npm i --save bip32 bitcoinjs-lib ethereumjs-util.  Then you can derive your keys and addresses like this:
+node derive.js 6cc741dc06b353b97852b15c42d0fcb672d48983630840d13780715dd23f6655e7344ff000122e078e7f6b82edb7d4225f15767c61f3ab9a1400ce9f42d38cd9 1 ETH priv
 
 ```
 const bip32 = require('bip32');
@@ -46,39 +51,45 @@ const bitcoin = require('bitcoinjs-lib');
 const ethereum = require('ethereumjs-util');
 const ETH_PATH = "m/44'/60'/0'/0"
 const BTC_PATH = "m/49'/0'/0'/0"
-class Wallet {
-  constructor(seed) {
-    if (!seed)
-      throw new Error('You must include your seed as a hex string');
-    this.wallet = bip32.fromSeed(Buffer.from(seed, 'hex'))
-  }
-  getAddress(type, idx) {
-    let priv = this.getPriv(type, idx);
-    if (type === 'ETH') {
-      return ethereum.privateToAddress(priv).toString('hex');
-    } else if (type === 'BTC') {
-      const data = bitcoin.payments.p2sh({
-        redeem: bitcoin.payments.p2wpkh({ pubkey: pub }),
-      });
-      return data.address;
-    } else {
-      throw new Error(`Unsupported derivation type: ${type}`);
-    }
-  }
-  getPriv(type, idx) {
-    if (type === 'ETH') {
-      return this._getPriv(`${ETH_PATH}/${idx}`)
-    } else if (type === 'BTC') {
-      return this._getPriv(`${BTC_PATH}/${idx}`)
-    } else {
-      throw new Error(`Unsupported derivation type: ${type}`);
-    }
-  }
-  _getPriv(path) {
-    return this.wallet.derivePath(path).privateKey;
-  }
+const seed = process.argv[2];
+if (!seed)
+  throw new Error('You must include your seed as a hex string');
+const wallet = bip32.fromSeed(Buffer.from(seed, 'hex'));
+let idx = process.argv[3];
+if (idx === undefined || isNaN(idx)) {
+  idx = 0;
+  console.warn('Unspecified derivation index. Using default index 0.');
 }
+let type = process.argv[4];
+if (type.toUpperCase() !== 'ETH' && type.toUppderCase() !== 'BTC') {
+  type = 'ETH';
+  console.warn('Unspecified derivation type. Using default type ETH.');
+}
+let showPriv = false;
+if (process.argv[5] === 'priv') {
+  showPriv = true;
+}
+const path = type === 'ETH' ? ETH_PATH : BTC_PATH;
+const key = wallet.derivePath(`${path}/${idx}`);
+const priv = key.privateKey;
+let addr;
+if (type === 'ETH') {
+  addr = '0x' + ethereum.privateToAddress(priv).toString('hex')
+} else {
+  const preAddr = bitcoin.payments.p2sh({
+    redeem: bitcoin.payments.p2wpkh({ pubkey: key.publicKey }),
+  });
+  addr = preAddr.address;
+}
+console.log('\n\n')
+console.log(`---${type} key index ${idx}---`)
+console.log(`Address: ${addr}`);
+if (showPriv === true) {
+  console.log(`Private Key: ${priv.toString('hex')}`)
+}
+console.log('------------------------'
 ```
+
 ## Build
 For Mac
 ```
