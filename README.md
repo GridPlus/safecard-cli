@@ -9,14 +9,15 @@ Download the appropriate binary for your platform from the Release page here: ht
 | OS    | Binary |
 |:------|:-------|
 | MacOS | safecard-cli |
-| Windows | safecard-cli |
+| Windows | safecard-cli.exe |
 
-Run the binary on it's own to see usage info
+Run the binary on its own to see usage info
 ```
 safecard-cli
 ```
 
-There are currently two implemented command, exportSeed and deleteSeed, each requires the user pin to be verified before executing.
+There are currently two implemented commands, exportSeed and deleteSeed.
+Both require the user pin to be verified before executing.
 
 ### Export Seed
 
