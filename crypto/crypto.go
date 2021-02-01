@@ -57,7 +57,7 @@ func DeriveBTCPrivateKey(seed []byte, index int) (address []byte, privKey string
 	// masterPrivKey := btcwallet.MasterKey(seed[0:32])
 
 	//BIP32 attempt
-	masterKey, err := NewUnsaltedMasterKey(seed)
+	masterKey, err := bip32.NewMasterKey(seed)
 	if err != nil {
 		log.Error("error deriving master private key from seed: ", err)
 	}
@@ -104,7 +104,6 @@ func DeriveBTCPrivateKey(seed []byte, index int) (address []byte, privKey string
 	fifthPrivKey := SerializeShort(fifth)
 	fmt.Println("fifth private key")
 	fmt.Printf("%X\n", fifthPrivKey)
-
 	return nil, fifth.String(), nil
 
 	// address = fifth.Address()
