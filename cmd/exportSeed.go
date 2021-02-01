@@ -18,9 +18,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/GridPlus/keycard-go/gridplus"
 	"github.com/gridplus/safecard-cli/card"
-	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
@@ -39,36 +37,9 @@ func init() {
 }
 
 func exportSeed() {
-	cs, err := card.OpenSecureConnection()
+	seed, err := card.ExportSeed()
 	if err != nil {
-		fmt.Println("unable to open secure connection with card: ", err)
 		return
 	}
-	//Prompt user for pin
-	prompt := promptui.Prompt{
-		Label: "Pin",
-		Mask:  '*',
-	}
-	fmt.Println("Please enter 6 digit pin:")
-	result, err := prompt.Run()
-	if err != nil {
-		fmt.Println("prompt failed: err: ", err)
-		return
-	}
-
-	err = cs.VerifyPIN(result)
-	if err != nil {
-		fmt.Println("error verifying pin. err: ", err)
-		return
-	}
-	seed, err := cs.ExportSeed()
-	if err == gridplus.ErrSeedInvalidLength {
-		fmt.Println("card does not appear to have valid exportable seed.")
-		return
-	}
-	if err != nil {
-		fmt.Println("unable to export seed. err: ", err)
-		return
-	}
-	fmt.Printf("recovery seed:\n0x%x\n", seed)
+	fmt.Printf("recovery seed:\n%x\n", seed)
 }
