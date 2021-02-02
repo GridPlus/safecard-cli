@@ -47,7 +47,7 @@ safecard-cli deleteSeed
 
 ### Export Seed
 
-Export the card's master wallet seed as a binary seed represented in hex. This hex seed can be used to derive wallet private keys and addresses. Note that this is **not a seed phrase**; it is instead a hash of your seed phrase. You will likely have difficulty finding third party wallet software that you can use to import this seed directly. However, you can keep this seed somewhere safe and import it to another SafeCard at a later date (load seed not yet implemented). 
+Export the card's master wallet seed as a binary seed represented in hex. This hex seed can be used to derive wallet private keys and addresses. Note that this is **not a seed phrase**; it is instead a hash of your seed phrase. You will likely have difficulty finding third party wallet software that you can use to import this seed directly. However, you can keep this seed somewhere safe and import it to another SafeCard at a later date (load seed not yet implemented).
 
 ```
 safecard-cli exportSeed
@@ -87,12 +87,12 @@ For Bitcoin we offer export of the master key for use in [Electrum](https://elec
 
 #### (Recommended) Master Key (Electrum)
 
-If you wish to import a full hierarchical deterministic (HD) wallet into Bitcoin wallet software, we highly recommend exporting the "master private key" and importing it into [Electrum](https://electrum.org/#home). 
+If you wish to import a full hierarchical deterministic (HD) wallet into Bitcoin wallet software, we highly recommend exporting the "master private key" and importing it into [Electrum](https://electrum.org/#home).
 
 > Note that the exported key is compatible with Electrum but probably not with anything else. Electrum expects a master key that is derived at the path `m/49'/0'/0'`, whereas usually "master key" refers to an underived key.
 
 ```
-safecard-cli exportPriv --electrum-master-priv true
+safecard-cli exportPriv --electrum-master-priv
 ```
 
 You can use the result of that to create an HD wallet in Electrum:
@@ -103,12 +103,12 @@ You can use the result of that to create an HD wallet in Electrum:
 
 #### Account Keys (Electrum)
 
-You can also export individual (i.e. "account") private keys for import into Electrum. By specifying Electrum import, `safecard-cli` will prefix the keys as needed. Using the `--electrum true` also sets `--wif true`, as Electrum only allows import of [WIF](https://en.bitcoin.it/wiki/Wallet_import_format) formatted private keys.
+You can also export individual (i.e. "account") private keys for import into Electrum. By specifying Electrum import, `safecard-cli` will prefix the keys as needed. Using the `--electrum` also sets `--wif`, as Electrum only allows import of [WIF](https://en.bitcoin.it/wiki/Wallet_import_format) formatted private keys.
 
 > Note: Electrum sometimes imports keys out of order and we don't really know why, but it doesn't affect use.
 
 ```
-safecard-cli exportPriv --num-keys 20 --electrum true
+safecard-cli exportPriv --num-keys 20 --electrum
 ```
 
 ![Electrum keys import part 1](./images/electrum-keys-1.png)
@@ -116,7 +116,7 @@ safecard-cli exportPriv --num-keys 20 --electrum true
 
 ### Account Keys
 
-If you want individual keys exported as raw strings, just don't set the `electrum` flag. You can export the keys themselves either as hex (default) or in WIF with the `--wif true` tag:
+If you want individual keys exported as raw strings, just don't set the `electrum` flag. You can export the keys themselves either as hex (default) or in WIF with the `--wif` tag:
 
 ```
 safecard-cli exportPriv

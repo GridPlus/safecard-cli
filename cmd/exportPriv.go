@@ -33,13 +33,25 @@ var wif bool
 // exportPriv represents the exportPriv command
 var exportPriv = &cobra.Command{
 	Use:   "exportPriv",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Exports safecard private keys, with various options for BTC and ETH",
+	Long: `Exports safecard private keys. Recommended usage below. Please see README for more details and options.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Ethereum:
+The exported Ethereum private key(s) (printed as hexadecimal strings) may be pasted directly into MetaMask. By default, the Lattice only uses the first key, so you can simply run:
+
+safecard-cli exportPriv --coin ETH
+
+Bitcoin:
+For Bitcoin we offer export of the master key for use in Electrum (recommended) as well as different types of individual account private keys.
+
+(Recommended) Master Key (Electrum)
+If you wish to import a full hierarchical deterministic (HD) wallet into Bitcoin wallet software, we highly recommend exporting the "master private key" and importing it into Electrum.
+
+Note that the exported key is compatible with Electrum but probably not with anything else. Electrum expects a master key that is derived at the path m/49'/0'/0', whereas usually "master key" refers to an underived key.
+
+safecard-cli exportPriv --electrum-master-priv
+You can use the result of that to create an HD wallet in Electrum.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		exportPrivKey()
 	},
