@@ -20,8 +20,7 @@ func bip49Version() []byte {
 	return BIP49Version
 }
 
-//TODO: Clean up
-func DeriveWalletPrivateKey(seed []byte) (address string, privKey string, err error) {
+func DeriveEthWalletPrivateKey(seed []byte) (address string, privKey string, err error) {
 	wallet, err := hdwallet.NewFromSeed(seed)
 	if err != nil {
 		log.Error("could not parse seed into wallet. ", err)

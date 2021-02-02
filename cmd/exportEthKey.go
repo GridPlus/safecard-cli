@@ -58,7 +58,7 @@ func exportEthKey() {
 		return
 	}
 
-	address, privateKey, err := crypto.DeriveWalletPrivateKey(seed)
+	address, privateKey, err := crypto.DeriveEthWalletPrivateKey(seed)
 	if err != nil {
 		return
 	}

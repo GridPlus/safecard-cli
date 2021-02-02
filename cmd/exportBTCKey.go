@@ -23,6 +23,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var privateKeysMode bool
+var numKeys int
+
 // exportBTCKeyCmd represents the exportBTCKey command
 var exportBTCKeyCmd = &cobra.Command{
 	Use:   "exportBTCKey",
@@ -34,6 +37,10 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if privateKeysMode {
+			fmt.Println("selected private keys option")
+			return
+		}
 		exportBTCKey()
 	},
 }
@@ -50,6 +57,8 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// exportBTCKeyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	exportBTCKeyCmd.Flags().BoolVar(&privateKeysMode, "private-keys", false, "export individual BTC private keys")
+	exportBTCKeyCmd.Flags().IntVar(&numKeys, "num-keys", 1, "the number of private keys to export")
 }
 
 func exportBTCKey() {
