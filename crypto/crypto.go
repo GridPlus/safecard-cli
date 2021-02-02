@@ -7,13 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	hdwallet "github.com/miguelmota/go-ethereum-hdwallet"
 	log "github.com/sirupsen/logrus"
 	"github.com/tyler-smith/go-bip32"
 )
-
-const ETHDerivationPath = "m/44'/60'/0'/0/0"
-const BTCDerivationPath = "m/44'/0'/0'/0/0"
 
 // The BIP49 "version" is different than the normal BIP44 one. We need this in order
 // to produce the `yprv` prefixed master key (as oposed to xprv for BIP44)
@@ -21,29 +17,6 @@ const BTCDerivationPath = "m/44'/0'/0'/0/0"
 func bip49Version() []byte {
 	BIP49Version, _ := hex.DecodeString("049d7878")
 	return BIP49Version
-}
-
-func DeriveEthWalletPrivateKey(seed []byte) (address string, privKey string, err error) {
-	wallet, err := hdwallet.NewFromSeed(seed)
-	if err != nil {
-		log.Error("could not parse seed into wallet. ", err)
-		return "", "", err
-	}
-	path := hdwallet.MustParseDerivationPath(ETHDerivationPath)
-	account, err := wallet.Derive(path, false)
-	if err != nil {
-		log.Error("could not derive path: ", err)
-		return "", "", err
-	}
-
-	fmt.Println(account.Address.Hex())
-	privateKey, err := wallet.PrivateKeyHex(account)
-	if err != nil {
-		log.Error("could not derive private key from account: ", err)
-		return "", "", err
-	}
-
-	return account.Address.Hex(), privateKey, nil
 }
 
 // DerivePrivateKey derives a single HD wallet's private key given the seed and a path of indices.
@@ -141,6 +114,21 @@ func GetPath(pathStr string) ([]uint32, error) {
 		path[i-start] = uint32(idx)
 	}
 	return path, nil
+}
+
+// GetStrPath converts a set of indices to a BIP32 path string (e.g. m/44'/0'/0'/0/0)
+func GetStrPath(path []uint32) string {
+	pathStr := "m"
+	for i := 0; i < len(path); i++ {
+		pathStr += "/"
+		if path[i] >= uint32(0x80000000) {
+			pathStr += strconv.FormatUint(uint64(path[i])-0x80000000, 10)
+			pathStr += "'"
+		} else {
+			pathStr += strconv.FormatUint(uint64(path[i]), 10)
+		}
+	}
+	return pathStr
 }
 
 // GetCurrencyType takes a path (set of u32 indices) and returns the name of the

@@ -41,5 +41,11 @@ func exportSeed() {
 	if err != nil {
 		return
 	}
-	fmt.Printf("recovery seed:\n%x\n", seed)
+	fmt.Println("\n-------------------------")
+	fmt.Println("Exporting wallet seed in hexadecimal format")
+	fmt.Println("NOTE: This is NOT your seed phrase - it is the hash of your seed phrase. It will be limited in its use.")
+	fmt.Println("If you wish to export private keys instead, please see the `exportPriv` command.")
+	fmt.Println("-------------------------")
+	fmt.Println()
+	fmt.Printf("%x\n\n", seed)
 }
