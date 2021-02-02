@@ -58,12 +58,10 @@ func exportBTCKey() {
 		return
 	}
 
-	address, privateKey, err := crypto.DeriveBTCPrivateKey(seed, 0)
+	privateKey, err := crypto.GetElectrumBIP49MasterPriv(seed)
 	if err != nil {
 		return
 	}
-	fmt.Println("address: ")
-	fmt.Printf("%X\n", address)
 	fmt.Println("private key: ")
 	fmt.Println(privateKey)
 }
