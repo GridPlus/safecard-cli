@@ -24,10 +24,11 @@ import (
 )
 
 var coin string
-var electrumPrefixes bool
+var electrum bool
 var electrumWallet bool
 var numKeys int
 var startPath string
+var wif bool
 
 // exportPriv represents the exportPriv command
 var exportPriv = &cobra.Command{
@@ -68,14 +69,18 @@ func init() {
 		"start-path",
 		"m/49'/0'/0'/0/0",
 		"(Default m/49'/0'/0'/0/0) A BIP32 path providing the starting point of the derivation")
-	exportPriv.Flags().BoolVar(&electrumPrefixes,
-		"electrum-prefixes",
+	exportPriv.Flags().BoolVar(&electrum,
+		"electrum",
 		false,
-		"(Default false) If true, include prefixes on exported individual private keys that allows them to be properly imported into Electrum.")
+		"(Default false) If true, includes prefixes and encoding necessary to import Bitcoin private keys into Electrum")
 	exportPriv.Flags().StringVar(&coin,
 		"coin",
 		"",
-		"May be specified as either 'BTC' or 'ETH'. By default this is inferred from 'start-path' indices.")
+		"(Default BTC) May be specified as either 'BTC' or 'ETH'. By default this is inferred from 'start-path' indices.")
+	exportPriv.Flags().BoolVar(&wif,
+		"wif",
+		false,
+		"(Default false) If true, single private keys are exported in WIF.")
 }
 
 func exportPrivKey() {
@@ -103,6 +108,10 @@ func exportPrivKey() {
 		if err != nil {
 			fmt.Println("Error encountered with path: ", err)
 		}
+		// Set wif=true if we are exporting keys for Electrum
+		if true == electrum {
+			wif = true
+		}
 
 		fmt.Println("\n-------------------------")
 		fmt.Printf("Exporting %d %s private keys\n", numKeys, currency)
@@ -110,13 +119,13 @@ func exportPrivKey() {
 		fmt.Println("-------------------------")
 		fmt.Println()
 		for i := 0; i < numKeys; i++ {
-			priv, err := crypto.DerivePrivateKey(seed, path)
+			priv, err := crypto.DerivePrivateKey(seed, path, wif)
 			if err != nil {
 				fmt.Println("Error encountered deriving key: ", err)
 				return
 			}
 			prefix := ""
-			if true == electrumPrefixes {
+			if true == electrum {
 				prefix, err = crypto.GetElectrumPrivKeyPrefix(path)
 				if err != nil {
 					fmt.Println("Error encountered buidling Electrum import string: ", err)

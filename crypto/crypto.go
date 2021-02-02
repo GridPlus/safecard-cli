@@ -1,15 +1,20 @@
 package crypto
 
 import (
+	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 
+	"github.com/FactomProject/basen"
 	log "github.com/sirupsen/logrus"
 	"github.com/tyler-smith/go-bip32"
 )
+
+// B58Enc is the base58 library used for base58 encoding data
+var B58Enc = basen.NewEncoding("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
 
 // The BIP49 "version" is different than the normal BIP44 one. We need this in order
 // to produce the `yprv` prefixed master key (as oposed to xprv for BIP44)
@@ -19,9 +24,43 @@ func bip49Version() []byte {
 	return BIP49Version
 }
 
+// Convenience function for generating a 4-byte checksum from a preimage
+func doubleSha256Checksum(data []byte) ([]byte, error) {
+	hasher := sha256.New()
+	_, err := hasher.Write(data)
+	if err != nil {
+		return nil, err
+	}
+	hash1 := hasher.Sum(nil)
+	hasher = sha256.New()
+	_, err = hasher.Write(hash1)
+	if err != nil {
+		return nil, err
+	}
+	hash2 := hasher.Sum(nil)
+	return hash2[:4], nil
+}
+
+// Get the WIF representation of a private key. This is used in Electrum to import single account keys.
+// See: https://en.bitcoin.it/wiki/Wallet_import_format
+func getWif(priv []byte) (string, error) {
+	version := []byte{0x80}
+	compression := []byte{0x01}
+	key := append(version, priv...)
+	key = append(key, compression...)
+	// Add checksum
+	cs, err := doubleSha256Checksum(key)
+	if err != nil {
+		return "", err
+	}
+	key = append(key, cs...)
+	// Convert to base58 string and return
+	return B58Enc.EncodeToString(key), nil
+}
+
 // DerivePrivateKey derives a single HD wallet's private key given the seed and a path of indices.
 // Returns hex string representation of private key
-func DerivePrivateKey(seed []byte, path []uint32) (privKey string, err error) {
+func DerivePrivateKey(seed []byte, path []uint32, wif bool) (privKey string, err error) {
 	key, err := bip32.NewMasterKey(seed)
 	if err != nil {
 		log.Error("error deriving master private key from seed: ", err)
@@ -32,6 +71,9 @@ func DerivePrivateKey(seed []byte, path []uint32) (privKey string, err error) {
 		if err != nil {
 			return "", err
 		}
+	}
+	if true == wif {
+		return getWif(key.Key)
 	}
 	keyStr := hex.EncodeToString(key.Key)
 	return keyStr, nil

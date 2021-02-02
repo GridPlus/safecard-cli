@@ -3,6 +3,7 @@ module github.com/gridplus/safecard-cli
 go 1.14
 
 require (
+	github.com/FactomProject/basen v0.0.0-20150613233007-fe3947df716e
 	github.com/GridPlus/keycard-go v0.0.0-20210119184709-904000439dad
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v2 v2.0.0 // indirect
