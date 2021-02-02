@@ -11,11 +11,25 @@ First download a binary from our [releases page](https://github.com/GridPlus/saf
 | MacOS | safecard-cli |
 | Windows | safecard-cli.exe |
 
-Once downloaded, you can run the binary from the download directory with:
+Once downloaded, you will be interacting with the `safecard-cli` binary from the command line. We recommend moving it from your Downloads folder to a more permanent location. 
+
+> Unfamiliar with the command line? For Mac, there is a built-in program called `Terminal` that you can use. Windows has its own built-in program called `Command Prompt`. We recommend Googling how to run programs from the command line. It is pretty easy once you get the basic commands down. 
+
+**Windows**
+
+For windows, you can open Command Prompt and execute `safecard-cli.exe` directly.
+
+**Mac**
+
+Mac users may have more issues running `safecard-cli`. Before starting, you need to give permission to the binary with:
 
 ```
-./safecard-cli
+chmod +x safecard-cli
 ```
+
+If you try to run `./safecard-cli` you will likely get an error related to your system permissions (i.e. "this is an untrusted app"). If you see this, locate the `safecard-cli` binary file in Mac's Preview file explorer, right click, and open with Terminal. This will ask you if you trust the app - press yes. You only need to do this **once**. Once `safecard-cli` runs and you see output, close that Terminal window. 
+
+You should now be able to run the app freely from your command line with `./safecard-cli`.
 
 ### Building from Source
 
