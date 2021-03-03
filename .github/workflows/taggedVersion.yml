@@ -37,7 +37,6 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          title: "Latest Release"
           files: |
             safecard-cli
             safecard-cli.exe
