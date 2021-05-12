@@ -4,7 +4,7 @@ A CLI for interacting with a GridPlus SafeCard through an HID card reader. Runs 
 
 ## Installation
 
-First download a binary from our [releases page](https://github.com/GridPlus/safecard-cli/releases/tag/latest). Please choose the correct binary for your system:
+First download a binary from our [releases page](https://github.com/GridPlus/safecard-cli/releases). Please choose the correct binary for your system:
 
 | OS    | Binary |
 |:------|:-------|
