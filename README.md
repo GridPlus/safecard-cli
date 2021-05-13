@@ -10,11 +10,22 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 1. Connect `USB Card Reader` to your computer.
 2. Insert `SafeCard` to `USB Card Reader`.
 3. Download binary file ([Mac](https://github.com/GridPlus/safecard-cli/releases/download/v0.1.1/safecard-cli), [Windows](https://github.com/GridPlus/safecard-cli/releases/download/v0.1.1/safecard-cli.exe))
-  > Once downloaded, you will be interacting with the safecard-cli binary from the command line. We recommend moving it from your Downloads folder to a more permanent location.
-5. Open `Terminal` 
-> Mac: cmd+ space to search for terminal.app on mac
-> Windows: open `Command Prompt` and execute safecard-cli.exe directly
-6. Go to directory where binary file was downloaded. Eg. If it is in ‘Downloads’ directory. Type ‘cd downloads’
+  > Once downloaded, you will be interacting with the safecard-cli binary from the command line. We recommend moving it from your `Downloads` folder to a more permanent location.
+5. For Windows, open `Command Prompt` and execute `safecard-cli.exe` directly.
+6. For Mac:
+ - Locate `safecard-cli` binary file in Mac's Preview file explorer > Right Click > Open With > Terminal
+ - This will ask you if you trust the app - press Yes.
+ - Now open `Terminal` (press 'cmd+ space' then search for terminal.app)
+ - Go to directory where binary file resides.
+ - Run `sudo chmod +x safecard-cli` then enter password (to give permission to the binary file)
+ 
+ 
+ > NOTE: If you want to build from source instead, you can clone this repo and run one of the following.
+ > 
+ > - Mac/Linux ```make build```
+ > - Windows ```make windows-build```
+
+
 
 First download a binary from our [releases page](https://github.com/GridPlus/safecard-cli/releases). Please choose the correct binary for your system:
 
