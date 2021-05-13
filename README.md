@@ -27,7 +27,7 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 ## Usage
 
-> Note: Before running `./ safecard-cli`, ensure you have a valid GridPlus SafeCard inserted into an HID reader.
+> Note: Before running `./ safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
 
 ### Delete Seed
 
