@@ -27,11 +27,11 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 ## Usage
 
-> Note: Before running `./ safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
+> NOTE: Before running `./ safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
 
 ### Delete Seed
 
-> Warning: This operation is irreversible.
+> WARNING: This operation is irreversible.
 
 Permanently deletes the `SafeCard` wallet seed. It will return your SafeCard to a pre-wallet state. If you insert the SafeCard into a Lattice after deleting the seed, the Lattice will prompt you to create another wallet on the SafeCard.
 
