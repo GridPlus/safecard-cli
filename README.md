@@ -1,6 +1,6 @@
 # safecard-cli
 
-CLI for interacting with a GridPlus SafeCard through an HID card reader. Runs on both Windows and MacOS with a USB HID card reader attached. Here's an example of an [HID USB card reader](https://www.amazon.com/HID-OMNIKEY-3121-Card-Reader/dp/B00AT4NX8S/ref=sr_1_14?dchild=1&keywords=hid+reader&qid=1611873802&sr=8-14). Note that you must obtain a *contact* HID reader, i.e. one in which you can insert your SafeCard.
+A CLI for interacting with a GridPlus SafeCard through an HID card reader. Runs on both Windows and MacOS with a USB HID card reader attached. Here's an example of an [HID USB card reader](https://www.amazon.com/HID-OMNIKEY-3121-Card-Reader/dp/B00AT4NX8S/ref=sr_1_14?dchild=1&keywords=hid+reader&qid=1611873802&sr=8-14). Note that you must obtain a *contact* HID reader, i.e. one in which you can insert your SafeCard.
 
 ## Installation
 
