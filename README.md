@@ -20,7 +20,7 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
  - Run `sudo chmod +x safecard-cli` then enter password (to give permission to the binary file)
  
  
- > NOTE: If you want to build from source instead, you can clone this repo and run one of the following.
+ > NOTE: If you want to build from source instead, you can clone this repo and run:
  > 
  > - Mac/Linux ```make build```
  > - Windows ```make windows-build```
