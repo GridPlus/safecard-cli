@@ -14,9 +14,9 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 5. For Windows, open `Command Prompt` and execute `safecard-cli.exe` directly.
 6. For Mac:
  - Locate `safecard-cli` binary file in Mac's Preview file explorer > Right Click > Open With > Terminal
- - This will ask you if you trust the app - press Yes.
+ - This will ask you if you trust the app - press Yes
  - Now open `Terminal` (press 'cmd+ space' then search for terminal.app)
- - Go to directory where binary file resides.
+ - Go to directory where binary file resides
  - Run `sudo chmod +x safecard-cli` then enter password (to give permission to the binary file)
  
  
