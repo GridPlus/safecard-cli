@@ -25,61 +25,18 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
  > - Mac/Linux ```make build```
  > - Windows ```make windows-build```
 
-
-
-First download a binary from our [releases page](https://github.com/GridPlus/safecard-cli/releases). Please choose the correct binary for your system:
-
-| OS    | Binary |
-|:------|:-------|
-| MacOS | safecard-cli |
-| Windows | safecard-cli.exe |
-
-Once downloaded, you will be interacting with the `safecard-cli` binary from the command line. We recommend moving it from your Downloads folder to a more permanent location. 
-
-> Unfamiliar with the command line? For Mac, there is a built-in program called `Terminal` that you can use. Windows has its own built-in program called `Command Prompt`. We recommend Googling how to run programs from the command line. It is pretty easy once you get the basic commands down. 
-
-**Windows**
-
-For windows, you can open Command Prompt and execute `safecard-cli.exe` directly.
-
-**Mac**
-
-Mac users may have more issues running `safecard-cli`. Before starting, you need to give permission to the binary with:
-
-```
-chmod +x safecard-cli
-```
-
-If you try to run `./safecard-cli` you will likely get an error related to your system permissions (i.e. "this is an untrusted app"). If you see this, locate the `safecard-cli` binary file in Mac's Preview file explorer, right click, and open with Terminal. This will ask you if you trust the app - press yes. You only need to do this **once**. Once `safecard-cli` runs and you see output, close that Terminal window. 
-
-You should now be able to run the app freely from your command line with `./safecard-cli`.
-
-### Building from Source
-
-If you want to build from source instead, you can clone this repo and run one of the following.
-
-**Mac/Linux**
-
-```
-make build
-```
-
-**Windows**
-
-```
-make windows-build
-```
-
 ## Usage
 
-Before running `safecard-cli`, ensure you have a valid GridPlus SafeCard inserted into an HID reader.
+> Note: Before running `./ safecard-cli`, ensure you have a valid GridPlus SafeCard inserted into an HID reader.
 
 ### Delete Seed
 
-Delete the SafeCard's wallet seed. This operation is irreversible. It will return your SafeCard to a pre-wallet state. If you insert the SafeCard into a Lattice after deleting the seed, the Lattice will prompt you to create another wallet on the SafeCard.
+> Warning: This operation is irreversible.
+
+Permanently deletes the `SafeCard` wallet seed. It will return your SafeCard to a pre-wallet state. If you insert the SafeCard into a Lattice after deleting the seed, the Lattice will prompt you to create another wallet on the SafeCard.
 
 ```
-safecard-cli deleteSeed
+./ safecard-cli deleteSeed
 ```
 
 ### Export Seed
@@ -87,7 +44,7 @@ safecard-cli deleteSeed
 Export the card's master wallet seed as a binary seed represented in hex. This hex seed can be used to derive wallet private keys and addresses. Note that this is **not a seed phrase**; it is instead a hash of your seed phrase. You will likely have difficulty finding third party wallet software that you can use to import this seed directly. However, you can keep this seed somewhere safe and import it to another SafeCard at a later date (load seed not yet implemented).
 
 ```
-safecard-cli exportSeed
+./ safecard-cli exportSeed
 ```
 
 ### Export Private Keys
@@ -95,7 +52,7 @@ safecard-cli exportSeed
 Export one or more private keys from the card. **These keys are generally more useful if you want to import your SafeCard wallet into a 3rd party wallet.**
 
 ```
-safecard-cli exportPriv
+./ safecard-cli exportPriv
 ```
 
 **Options**
@@ -103,7 +60,7 @@ safecard-cli exportPriv
 This command has several options, which you can access with:
 
 ```
-safecard-cli exportPriv --help
+./ safecard-cli exportPriv --help
 ```
 
 #### Ethereum
@@ -111,7 +68,7 @@ safecard-cli exportPriv --help
 The exported Ethereum private key(s) (printed as hexadecimal strings) may be pasted directly into [MetaMask](https://metamask.io). By default, the Lattice only uses the first key, so you can simply run:
 
 ```
-safecard-cli exportPriv --coin ETH
+./ safecard-cli exportPriv --coin ETH
 ```
 
 You can paste the result of that into MetaMask:
@@ -129,7 +86,7 @@ If you wish to import a full hierarchical deterministic (HD) wallet into Bitcoin
 > Note that the exported key is compatible with Electrum but probably not with anything else. Electrum expects a master key that is derived at the path `m/49'/0'/0'`, whereas usually "master key" refers to an underived key.
 
 ```
-safecard-cli exportPriv --electrum-master-priv
+./ safecard-cli exportPriv --electrum-master-priv
 ```
 
 You can use the result of that to create an HD wallet in Electrum:
@@ -145,7 +102,7 @@ You can also export individual (i.e. "account") private keys for import into Ele
 > Note: Electrum sometimes imports keys out of order and we don't really know why, but it doesn't affect use.
 
 ```
-safecard-cli exportPriv --num-keys 20 --electrum
+./ safecard-cli exportPriv --num-keys 20 --electrum
 ```
 
 ![Electrum keys import part 1](./images/electrum-keys-1.png)
@@ -156,11 +113,11 @@ safecard-cli exportPriv --num-keys 20 --electrum
 If you want individual keys exported as raw strings, just don't set the `electrum` flag. You can export the keys themselves either as hex (default) or in WIF with the `--wif` tag:
 
 ```
-safecard-cli exportPriv
+./ safecard-cli exportPriv
 ```
 
 ```
-safecard-cli exportPriv --wif
+./ safecard-cli exportPriv --wif
 ```
 
 
