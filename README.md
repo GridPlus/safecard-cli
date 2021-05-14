@@ -31,7 +31,7 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 ### Delete Seed
 
-> WARNING: This operation is irreversible.
+> WARNING: This operation is irreversible. But, deleting the seed does not affect the SafeCard PIN. You will still need the PIN to generate a new seed later.
 
 Permanently deletes the `SafeCard` wallet seed. It will return your SafeCard to a pre-wallet state. If you insert the SafeCard into a Lattice after deleting the seed, the Lattice will prompt you to create another wallet on the SafeCard.
 
