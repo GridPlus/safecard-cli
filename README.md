@@ -27,7 +27,7 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 ## Usage
 
-> NOTE: Before running `./ safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
+> NOTE: Before running `./safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
 
 ### Delete Seed
 
@@ -36,7 +36,7 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 Permanently deletes the `SafeCard` wallet seed. It will return your SafeCard to a pre-wallet state. If you insert the SafeCard into a Lattice after deleting the seed, the Lattice will prompt you to create another wallet on the SafeCard.
 
 ```
-./ safecard-cli deleteSeed
+./safecard-cli deleteSeed
 ```
 
 ### Export Seed
@@ -44,7 +44,7 @@ Permanently deletes the `SafeCard` wallet seed. It will return your SafeCard to 
 Export the card's master wallet seed as a binary seed represented in hex. This hex seed can be used to derive wallet private keys and addresses. Note that this is **not a seed phrase**; it is instead a hash of your seed phrase. You will likely have difficulty finding third party wallet software that you can use to import this seed directly. However, you can keep this seed somewhere safe and import it to another SafeCard at a later date (load seed not yet implemented).
 
 ```
-./ safecard-cli exportSeed
+./safecard-cli exportSeed
 ```
 
 ### Export Private Keys
@@ -52,7 +52,7 @@ Export the card's master wallet seed as a binary seed represented in hex. This h
 Export one or more private keys from the card. **These keys are generally more useful if you want to import your SafeCard wallet into a 3rd party wallet.**
 
 ```
-./ safecard-cli exportPriv
+./safecard-cli exportPriv
 ```
 
 **Options**
@@ -60,7 +60,7 @@ Export one or more private keys from the card. **These keys are generally more u
 This command has several options, which you can access with:
 
 ```
-./ safecard-cli exportPriv --help
+./safecard-cli exportPriv --help
 ```
 
 #### Ethereum
@@ -68,7 +68,7 @@ This command has several options, which you can access with:
 The exported Ethereum private key(s) (printed as hexadecimal strings) may be pasted directly into [MetaMask](https://metamask.io). By default, the Lattice only uses the first key, so you can simply run:
 
 ```
-./ safecard-cli exportPriv --coin ETH
+./safecard-cli exportPriv --coin ETH
 ```
 
 You can paste the result of that into MetaMask:
@@ -86,7 +86,7 @@ If you wish to import a full hierarchical deterministic (HD) wallet into Bitcoin
 > Note that the exported key is compatible with Electrum but probably not with anything else. Electrum expects a master key that is derived at the path `m/49'/0'/0'`, whereas usually "master key" refers to an underived key.
 
 ```
-./ safecard-cli exportPriv --electrum-master-priv
+./safecard-cli exportPriv --electrum-master-priv
 ```
 
 You can use the result of that to create an HD wallet in Electrum:
@@ -102,7 +102,7 @@ You can also export individual (i.e. "account") private keys for import into Ele
 > Note: Electrum sometimes imports keys out of order and we don't really know why, but it doesn't affect use.
 
 ```
-./ safecard-cli exportPriv --num-keys 20 --electrum
+./safecard-cli exportPriv --num-keys 20 --electrum
 ```
 
 ![Electrum keys import part 1](./images/electrum-keys-1.png)
@@ -113,11 +113,11 @@ You can also export individual (i.e. "account") private keys for import into Ele
 If you want individual keys exported as raw strings, just don't set the `electrum` flag. You can export the keys themselves either as hex (default) or in WIF with the `--wif` tag:
 
 ```
-./ safecard-cli exportPriv
+./safecard-cli exportPriv
 ```
 
 ```
-./ safecard-cli exportPriv --wif
+./safecard-cli exportPriv --wif
 ```
 
 
