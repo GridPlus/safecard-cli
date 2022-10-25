@@ -29,6 +29,22 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 > NOTE: Before running `./safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
 
+### Check Certificate
+
+> NOTE: This method is written for production SafeCards v2.4 and above. Older cards will work too, but only after they have been setup with a PIN.
+
+If you would like to validate the authenticity of your SafeCard, you may run:
+
+```
+./safecard-cli checkCert
+```
+
+This will print the following success message if you have a valid card:
+
+> SafeCard is valid and has been certified by GridPlus!
+
+You can perform this operation on any production SafeCard - it does not require a PIN.
+
 ### Delete Seed
 
 > WARNING: This operation is irreversible. But, deleting the seed does not affect the SafeCard PIN. You will still need the PIN to generate a new seed later.
