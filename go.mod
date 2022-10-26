@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/FactomProject/basen v0.0.0-20150613233007-fe3947df716e
-	github.com/GridPlus/keycard-go v0.0.0-20210303174407-5036f0796853
+	github.com/GridPlus/keycard-go v0.0.0-20221026185543-f6ad0fa141c0
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v2 v2.0.0 // indirect
 	github.com/ebfe/scard v0.0.0-20190212122703-c3d1b1916a95
