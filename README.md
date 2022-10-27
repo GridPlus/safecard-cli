@@ -33,22 +33,6 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 If you have multiple card readers, this CLI will default to using the first one that was plugged into your system (i.e. index=0). You can change this by passing the flag `--reader=X`. This will work with any command.
 
-### Check Certificate
-
-> NOTE: This method is written for production SafeCards v2.4 and above. Older cards will work too, but only after they have been setup with a PIN.
-
-If you would like to validate the authenticity of your SafeCard, you may run:
-
-```
-./safecard-cli checkCert
-```
-
-This will print the following success message if you have a valid card:
-
-> SafeCard is valid and has been certified by GridPlus!
-
-You can perform this operation on any production SafeCard - it does not require a PIN.
-
 ### Delete Seed
 
 > WARNING: This operation is irreversible. But, deleting the seed does not affect the SafeCard PIN. You will still need the PIN to generate a new seed later.
@@ -67,20 +51,20 @@ Export the card's master wallet seed as a binary seed represented in hex. This h
 ./safecard-cli exportSeed
 ```
 
-### Export Private Keys
-
-Export one or more private keys from the card. **These keys are generally more useful if you want to import your SafeCard wallet into a 3rd party wallet.**
-
-```
-./safecard-cli exportPriv
-```
-
 ### Change PIN
 
 Change your cards pin.
 
 ```
 ./safecard-cli changePin
+```
+
+### Export Private Keys
+
+Export one or more private keys from the card. **These keys are generally more useful if you want to import your SafeCard wallet into a 3rd party wallet.**
+
+```
+./safecard-cli exportPriv
 ```
 
 **Options**
@@ -136,7 +120,7 @@ You can also export individual (i.e. "account") private keys for import into Ele
 ![Electrum keys import part 1](./images/electrum-keys-1.png)
 ![Electrum keys import part 2](./images/electrum-keys-2.png)
 
-### Account Keys
+#### Account Keys
 
 If you want individual keys exported as raw strings, just don't set the `electrum` flag. You can export the keys themselves either as hex (default) or in WIF with the `--wif` tag:
 
@@ -147,6 +131,22 @@ If you want individual keys exported as raw strings, just don't set the `electru
 ```
 ./safecard-cli exportPriv --wif
 ```
+
+### Check Certificate (>=v2.4)
+
+> NOTE: This will only work for v2.4 cards and was primarily developed for manufacturing.
+
+If you would like to validate the authenticity of your SafeCard, you may run:
+
+```
+./safecard-cli checkCert
+```
+
+This will print the following success message if you have a valid card:
+
+> SafeCard is valid and has been certified by GridPlus!
+
+You can perform this operation on any production SafeCard - it does not require a PIN.
 
 
 ## Development
