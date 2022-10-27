@@ -57,9 +57,15 @@ func checkCert() {
 		fmt.Println("ERROR: failed to export cert", err)
 		return
 	}
+	if len(cert) == 0 {
+		fmt.Println("ERROR: Cert export not supported by your card. >=V2.4 SafeCard required.")
+		return
+	}
+	fmt.Println("cert", cert)
 	off := 0
 	if cert[off] != 0x30 {
 		fmt.Println("ERROR: bad certificate data")
+		return
 	}
 	off++
 	certLen := cert[off]
@@ -83,6 +89,7 @@ func checkCert() {
 	valid := gridplus.ValidateCardCertificate(fullCert)
 	if !valid {
 		fmt.Println("ERROR: Certificate invalid")
+		return
 	}
 
 	// 4. Ask for a signature from the card and confirm it was signed
@@ -96,10 +103,12 @@ func checkCert() {
 	id, err := cs.IdentifyCard(challengeHash)
 	if err != nil {
 		fmt.Println("ERROR: failed to identify card", err)
+		return
 	}
 	idOff := 0
 	if id[idOff] != 0x80 {
 		fmt.Println("ERROR: idenfity card returned bad data")
+		return
 	}
 	idOff++
 	idPubLen := int(id[idOff])
@@ -111,10 +120,12 @@ func checkCert() {
 	// Make sure the pubkey matches
 	if !reflect.DeepEqual(idPubPlusMetadata, pubkey) {
 		fmt.Println("ERROR: ID pubkey does not match cert!")
+		return
 	}
 	challengeValid := gridplus.ValidateECDSASignature(idSig, idPub, challengeHash)
 	if !challengeValid {
 		fmt.Println("ERROR: Failed to validate ID key challenge")
+		return
 	}
 	fmt.Println("SafeCard is valid and has been certified by GridPlus!")
 }
