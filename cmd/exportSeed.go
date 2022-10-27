@@ -37,7 +37,7 @@ func init() {
 }
 
 func exportSeed() {
-	seed, err := card.ExportSeed()
+	seed, err := card.ExportSeed(readerIdx)
 	if err != nil {
 		return
 	}

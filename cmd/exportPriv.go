@@ -96,7 +96,7 @@ func init() {
 }
 
 func exportPrivKey() {
-	seed, err := card.ExportSeed()
+	seed, err := card.ExportSeed(readerIdx)
 	if err != nil {
 		return
 	}

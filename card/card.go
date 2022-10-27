@@ -11,7 +11,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func Connect() (*safecard.CommandSet, error) {
+func Connect(readerIdx int) (*safecard.CommandSet, error) {
 	ctx, err := scard.EstablishContext()
 	if err != nil {
 		return nil, err
@@ -21,18 +21,24 @@ func Connect() (*safecard.CommandSet, error) {
 		return nil, err
 	}
 
-	if len(readers) > 0 {
-		card, err := ctx.Connect(readers[0], scard.ShareShared, scard.ProtocolAny)
-		if err != nil {
-			return nil, err
-		}
-		return safecard.NewCommandSet(io.NewNormalChannel(card)), nil
+	if len(readers) <= readerIdx {
+		return nil, errors.New(
+			fmt.Sprintf(
+				"Cannot select card reader (have %d readers, want index=%d)", 
+				len(readers), 
+				readerIdx,
+			),
+		)
 	}
-	return nil, errors.New("no card reader found")
+	card, err := ctx.Connect(readers[readerIdx], scard.ShareShared, scard.ProtocolAny)
+	if err != nil {
+		return nil, err
+	}
+	return safecard.NewCommandSet(io.NewNormalChannel(card)), nil
 }
 
-func OpenSecureConnection() (*safecard.CommandSet, error) {
-	cs, err := Connect()
+func OpenSecureConnection(readerIdx int) (*safecard.CommandSet, error) {
+	cs, err := Connect(readerIdx)
 	if err != nil {
 		fmt.Println("error connecting to card")
 		fmt.Println(err)
@@ -56,8 +62,8 @@ func OpenSecureConnection() (*safecard.CommandSet, error) {
 	return cs, nil
 }
 
-func ExportSeed() ([]byte, error) {
-	cs, err := OpenSecureConnection()
+func ExportSeed(readerIdx int) ([]byte, error) {
+	cs, err := OpenSecureConnection(readerIdx)
 	if err != nil {
 		fmt.Println("unable to open secure connection with card: ", err)
 		return nil, err
