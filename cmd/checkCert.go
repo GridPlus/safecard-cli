@@ -42,7 +42,7 @@ func init() {
 
 func checkCert() {
 	// 1. Connect to the card
-	cs, err := card.Connect()
+	cs, err := card.Connect(readerIdx)
 	if err != nil {
 		fmt.Println("ERROR: connecting to card", err)
 		return

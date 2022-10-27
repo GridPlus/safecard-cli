@@ -29,6 +29,10 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 > NOTE: Before running `./safecard-cli`, ensure that you have a valid GridPlus SafeCard inserted into an HID reader.
 
+#### Multiple Card Readers
+
+If you have multiple card readers, this CLI will default to using the first one that was plugged into your system (i.e. index=0). You can change this by passing the flag `--reader=X`. This will work with any command.
+
 ### Check Certificate
 
 > NOTE: This method is written for production SafeCards v2.4 and above. Older cards will work too, but only after they have been setup with a PIN.
