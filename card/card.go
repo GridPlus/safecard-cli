@@ -1,8 +1,8 @@
 package card
 
 import (
-	"errors"
 	"fmt"
+	"os"
 
 	safecard "github.com/GridPlus/keycard-go"
 	"github.com/GridPlus/keycard-go/gridplus"
@@ -14,25 +14,26 @@ import (
 func Connect(readerIdx int) (*safecard.CommandSet, error) {
 	ctx, err := scard.EstablishContext()
 	if err != nil {
-		return nil, err
+		fmt.Println("Error getting scard context")
+		os.Exit(-3)
 	}
 	readers, err := ctx.ListReaders()
 	if err != nil {
-		return nil, err
+		fmt.Println("Error detecting card readers")
+		os.Exit(-3)
 	}
-
 	if len(readers) <= readerIdx {
-		return nil, errors.New(
-			fmt.Sprintf(
-				"Cannot select card reader (have %d readers, want index=%d)", 
-				len(readers), 
-				readerIdx,
-			),
+		fmt.Sprintf(
+			"Cannot select card reader (have %d readers, want index=%d)", 
+			len(readers), 
+			readerIdx,
 		)
+		os.Exit(-3)
 	}
 	card, err := ctx.Connect(readers[readerIdx], scard.ShareShared, scard.ProtocolAny)
 	if err != nil {
-		return nil, err
+		fmt.Println("Error connecting to specified card reader")
+		os.Exit(-3)
 	}
 	return safecard.NewCommandSet(io.NewNormalChannel(card)), nil
 }
@@ -42,7 +43,6 @@ func OpenSecureConnection(readerIdx int) (*safecard.CommandSet, error) {
 	if err != nil {
 		fmt.Println("error connecting to card")
 		fmt.Println(err)
-		return cs, err
 	}
 	err = cs.Select()
 	if err != nil {
