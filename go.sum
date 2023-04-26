@@ -50,6 +50,8 @@ github.com/GridPlus/keycard-go v0.0.0-20221026183734-76623fba750a h1:5Mba0XcPmYr
 github.com/GridPlus/keycard-go v0.0.0-20221026183734-76623fba750a/go.mod h1:2DqQO3kJ/fqXE5poOSRXhH4hdSQMwzgGY/GUQA7Ex9s=
 github.com/GridPlus/keycard-go v0.0.0-20221026185543-f6ad0fa141c0 h1:7ZwbEvmWvpcNg/7LfDDmD2sG5i9xMiIS1/DOEZikHn8=
 github.com/GridPlus/keycard-go v0.0.0-20221026185543-f6ad0fa141c0/go.mod h1:2DqQO3kJ/fqXE5poOSRXhH4hdSQMwzgGY/GUQA7Ex9s=
+github.com/GridPlus/keycard-go v0.0.0-20230426181733-1153de682fc5 h1:Zst6beL536Vz2/QOx/4E9wJ6f4pZg8/lXQPlyqhDh/I=
+github.com/GridPlus/keycard-go v0.0.0-20230426181733-1153de682fc5/go.mod h1:2DqQO3kJ/fqXE5poOSRXhH4hdSQMwzgGY/GUQA7Ex9s=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Shopify/sarama v1.23.1/go.mod h1:XLH1GYJnLVE0XCr6KdJGVJRTwY30moWNJ4sERjXX6fs=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
