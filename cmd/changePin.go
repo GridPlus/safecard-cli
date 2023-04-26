@@ -40,7 +40,7 @@ func init() {
 func changePin() {
 
 	//Open a secure connection
-	cs, err := card.OpenSecureConnection()
+	cs, err := card.OpenSecureConnection(readerIdx)
 	if err != nil {
 		fmt.Println("unable to open secure connection with card: ", err)
 		return

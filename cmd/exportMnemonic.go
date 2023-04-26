@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+Copyright © 2020 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,34 +17,35 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gridplus/safecard-cli/card"
+	"github.com/gridplus/safecard-cli/util"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
-// deleteSeedCmd represents the deleteSeed command
-var deleteSeedCmd = &cobra.Command{
-	Use:   "deleteSeed",
-	Short: "WARNING: This command is irreversible once completed. Deletes the safecard's wallet seed and all associated private keys.",
-	Long: `WARNING: This command is irreversible once completed.
-Deletes the safecard's wallet seed and all associated private keys.
-	`,
+// exportMnemonicCmd represents the exportData command
+var exportMnemonicCmd = &cobra.Command{
+	Use:   "exportMnemonic",
+	Short: "Export our Safecard wallet's mnemonic phrase.",
+	Long:  `Export your Safecard wallet's mnemonic phrase.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		deleteSeed()
+		exportMnemonic()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(deleteSeedCmd)
+	rootCmd.AddCommand(exportMnemonicCmd)
 }
 
-func deleteSeed() {
+func exportMnemonic() {
 	cs, err := card.OpenSecureConnection(readerIdx)
 	if err != nil {
 		fmt.Println("unable to open secure connection with card: ", err)
 		return
 	}
+
 	//Prompt user for pin
 	prompt := promptui.Prompt{
 		Label: "Pin",
@@ -56,27 +57,45 @@ func deleteSeed() {
 		fmt.Println("prompt failed: err: ", err)
 		return
 	}
-
 	err = cs.VerifyPIN(result)
 	if err != nil {
-		fmt.Println("error verifying pin. err: ", err)
+		fmt.Println("Error validating PIN.")
 		return
 	}
-	//Prompt user to confirm seed deletion before running
+
+	// Make sure the user is comfortable printing the mnemonic
 	confirm := promptui.Select{
 		Label: "Yes/No",
 		Items: []string{"Yes", "No"},
 	}
-	fmt.Println("Are you sure you want to delete this card's master wallet seed? This action is irreversible.")
+	fmt.Println(
+		"Are you sure you want to print your mnemonic phrase?\n" +
+		"Please make sure you are on a secure terminal and no one is looking over your shoulder.")
 	_, result, err = confirm.Run()
 	if err != nil || result != "Yes" {
-		fmt.Println("aborting deleteSeed command.")
+		fmt.Println("Aborting")
 		return
 	}
-	err = cs.RemoveKey()
+
+	// Get the data region
+	data, err := cs.ExportData()
 	if err != nil {
-		fmt.Println("unable to remove master key: ", err)
+		fmt.Println("error exporting data. err: ", err)
 		return
 	}
-	fmt.Println("succesfully removed master key!")
+	// Parse out the mnemonic
+	mnemonic := util.GetExportDataItemByTag(util.ExportDataTagMnemonic, data)
+	if mnemonic == nil {
+		fmt.Println(
+			`No mnemonic found on the card. SafeCard version may be too low. 
+			Only newer cards (v2.3+) support this feature.`)
+		return
+	}
+
+	words, err := util.ConvertMnemonicIndicesToWords(mnemonic)
+	fmt.Println("\nYour mnemonic phrase is:")
+	fmt.Println("-------------------------")
+	fmt.Println(strings.Join(words[:], " "))
+	fmt.Println("-------------------------")
 }
+

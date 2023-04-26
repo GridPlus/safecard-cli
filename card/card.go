@@ -1,8 +1,8 @@
 package card
 
 import (
-	"errors"
 	"fmt"
+	"os"
 
 	safecard "github.com/GridPlus/keycard-go"
 	"github.com/GridPlus/keycard-go/gridplus"
@@ -11,32 +11,38 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func Connect() (*safecard.CommandSet, error) {
+func Connect(readerIdx int) (*safecard.CommandSet, error) {
 	ctx, err := scard.EstablishContext()
 	if err != nil {
-		return nil, err
+		fmt.Println("Error getting scard context")
+		os.Exit(-3)
 	}
 	readers, err := ctx.ListReaders()
 	if err != nil {
-		return nil, err
+		fmt.Println("Error detecting card readers")
+		os.Exit(-3)
 	}
-
-	if len(readers) > 0 {
-		card, err := ctx.Connect(readers[0], scard.ShareShared, scard.ProtocolAny)
-		if err != nil {
-			return nil, err
-		}
-		return safecard.NewCommandSet(io.NewNormalChannel(card)), nil
+	if len(readers) <= readerIdx {
+		fmt.Sprintf(
+			"Cannot select card reader (have %d readers, want index=%d)", 
+			len(readers), 
+			readerIdx,
+		)
+		os.Exit(-3)
 	}
-	return nil, errors.New("no card reader found")
+	card, err := ctx.Connect(readers[readerIdx], scard.ShareShared, scard.ProtocolAny)
+	if err != nil {
+		fmt.Println("Error connecting to specified card reader")
+		os.Exit(-3)
+	}
+	return safecard.NewCommandSet(io.NewNormalChannel(card)), nil
 }
 
-func OpenSecureConnection() (*safecard.CommandSet, error) {
-	cs, err := Connect()
+func OpenSecureConnection(readerIdx int) (*safecard.CommandSet, error) {
+	cs, err := Connect(readerIdx)
 	if err != nil {
 		fmt.Println("error connecting to card")
 		fmt.Println(err)
-		return cs, err
 	}
 	err = cs.Select()
 	if err != nil {
@@ -56,8 +62,8 @@ func OpenSecureConnection() (*safecard.CommandSet, error) {
 	return cs, nil
 }
 
-func ExportSeed() ([]byte, error) {
-	cs, err := OpenSecureConnection()
+func ExportSeed(readerIdx int) ([]byte, error) {
+	cs, err := OpenSecureConnection(readerIdx)
 	if err != nil {
 		fmt.Println("unable to open secure connection with card: ", err)
 		return nil, err

@@ -26,6 +26,7 @@ import (
 )
 
 var cfgFile string
+var readerIdx int
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -54,6 +55,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.safecard-cli.yaml)")
+	rootCmd.PersistentFlags().IntVar(&readerIdx, "reader", 0, "Index of card reader to use")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
