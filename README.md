@@ -33,6 +33,18 @@ This is a CLI for interacting with a GridPlus SafeCard through an HID card reade
 
 If you have multiple card readers, this CLI will default to using the first one that was plugged into your system (i.e. index=0). You can change this by passing the flag `--reader=X`. This will work with any command.
 
+### Export Mnemonic
+
+For newer SafeCards (v2.4 and above) you can export the card's mnemonic. Note that older cards (v2.3 and below) do not support this export type and if you copied a seed from an older card to a newer version card, you still won't be able to export it (i.e. the exportability is "inherited" from the mnemonic's origin).
+
+**WARNING: This operation will print your mnemonic phrase in plain text on the console. Please make sure you are in a secure environment and location.**
+
+**NOTE: Optional wallet passphrases are NOT stored on the SafeCard. If you added a passphrase to your mnemonic when creating your wallet, that will not be printed here. You must remember it when importing your mnemonic into a new device or service.**
+
+```
+./safecard-cli exportMnemonic
+```
+
 ### Delete Seed
 
 > WARNING: This operation is irreversible. But, deleting the seed does not affect the SafeCard PIN. You will still need the PIN to generate a new seed later.
