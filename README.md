@@ -79,6 +79,12 @@ Export one or more private keys from the card. **These keys are generally more u
 ./safecard-cli exportPriv
 ```
 
+To set the starting export path:
+
+```
+./safecard-cli exportPriv --start-path "m/44'/60'/0'/0/x"
+```
+
 **Options**
 
 This command has several options, which you can access with:
